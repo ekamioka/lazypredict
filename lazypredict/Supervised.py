@@ -48,10 +48,10 @@ removed_classifiers = [
     ("ComplementNB", sklearn.naive_bayes.ComplementNB),
     ("GradientBoostingClassifier", sklearn.ensemble.GradientBoostingClassifier,),
     ("GaussianProcessClassifier", sklearn.gaussian_process.GaussianProcessClassifier,),
-    (
-        "HistGradientBoostingClassifier",
-        sklearn.ensemble._hist_gradient_boosting.gradient_boosting.HistGradientBoostingClassifier,
-    ),
+    #(
+    #    "HistGradientBoostingClassifier",
+    #    sklearn.ensemble._hist_gradient_boosting.gradient_boosting.HistGradientBoostingClassifier,
+    #),
     ("MLPClassifier", sklearn.neural_network.MLPClassifier),
     ("LogisticRegressionCV", sklearn.linear_model.LogisticRegressionCV),
     ("MultiOutputClassifier", sklearn.multioutput.MultiOutputClassifier),
