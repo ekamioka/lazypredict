@@ -16,6 +16,14 @@ from sklearn.compose import ColumnTransformer
 from sklearn.utils import all_estimators
 from sklearn.base import RegressorMixin
 from sklearn.base import ClassifierMixin
+from sklearn.multioutput import MultiOutputRegressor
+from sklearn.naive_bayes import (ComplementNB, MultinomialNB)
+from sklearn.multioutput import ClassifierChain
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.isotonic import IsotonicRegression
+from sklearn.neural_network import MLPClassifier
+from sklearn.cross_decomposition import CCA
+from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.metrics import (
     accuracy_score,
     balanced_accuracy_score,
@@ -24,10 +32,10 @@ from sklearn.metrics import (
     r2_score,
     mean_squared_error,
 )
+from sklearn.utils._testing import ignore_warnings
+
 import warnings
 import xgboost
-
-# import catboost
 import lightgbm
 
 warnings.filterwarnings("ignore")
