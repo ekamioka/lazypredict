@@ -44,14 +44,8 @@ removed_classifiers = [
     # ("CheckingClassifier", sklearn.utils._mocking.CheckingClassifier),
     ("ClassifierChain", sklearn.multioutput.ClassifierChain),
     ("ComplementNB", sklearn.naive_bayes.ComplementNB),
-    (
-        "GradientBoostingClassifier",
-        sklearn.ensemble.GradientBoostingClassifier,
-    ),
-    (
-        "GaussianProcessClassifier",
-        sklearn.gaussian_process.GaussianProcessClassifier,
-    ),
+    ("GradientBoostingClassifier", sklearn.ensemble.GradientBoostingClassifier,),
+    ("GaussianProcessClassifier", sklearn.gaussian_process.GaussianProcessClassifier,),
     (
         "HistGradientBoostingClassifier",
         sklearn.ensemble._hist_gradient_boosting.gradient_boosting.HistGradientBoostingClassifier,
@@ -63,10 +57,7 @@ removed_classifiers = [
     ("OneVsOneClassifier", sklearn.multiclass.OneVsOneClassifier),
     ("OneVsRestClassifier", sklearn.multiclass.OneVsRestClassifier),
     ("OutputCodeClassifier", sklearn.multiclass.OutputCodeClassifier),
-    (
-        "RadiusNeighborsClassifier",
-        sklearn.neighbors.RadiusNeighborsClassifier,
-    ),
+    ("RadiusNeighborsClassifier", sklearn.neighbors.RadiusNeighborsClassifier,),
     ("VotingClassifier", sklearn.ensemble.VotingClassifier),
 ]
 removed_regressors = [
@@ -74,7 +65,7 @@ removed_regressors = [
     ("ARDRegression", sklearn.linear_model.ARDRegression),
     ("CCA", sklearn.cross_decomposition.CCA),
     ("IsotonicRegression", sklearn.isotonic.IsotonicRegression),
-    ("StackingRegressor",sklearn.ensemble.StackingRegressor),
+    ("StackingRegressor", sklearn.ensemble.StackingRegressor),
     ("MultiOutputRegressor", sklearn.multioutput.MultiOutputRegressor),
     ("MultiTaskElasticNet", sklearn.linear_model.MultiTaskElasticNet),
     ("MultiTaskElasticNetCV", sklearn.linear_model.MultiTaskElasticNetCV),
@@ -90,6 +81,7 @@ removed_regressors = [
 
 CLASSIFIERS = [est for est in all_estimators() if
                (issubclass(est[1], ClassifierMixin) and (est[0] not in removed_classifiers))]
+
 REGRESSORS = [est for est in all_estimators() if
               (issubclass(est[1], RegressorMixin) and (est[0] not in removed_regressors))]
 
@@ -410,6 +402,7 @@ def volume_error(evaluation, simulation):
 
 # Helper class for performing classification
 
+
 class LazyClassifier:
     """
     This module helps in fitting to all the classification algorithms that are available in Scikit-learn
@@ -481,7 +474,7 @@ class LazyClassifier:
         custom_metric=None,
         predictions=False,
         random_state=42,
-        classifiers = "all"
+        classifiers="all",
     ):
         self.verbose = verbose
         self.ignore_warnings = ignore_warnings
@@ -550,7 +543,7 @@ class LazyClassifier:
             try:
                 temp_list = []
                 for classifier in self.classifiers:
-                    full_name = (classifier.__class__.__name__, classifier)
+                    full_name = (classifier.__name__, classifier)
                     temp_list.append(full_name)
                 self.classifiers = temp_list
             except Exception as exception:
@@ -680,13 +673,13 @@ class LazyClassifier:
             with key as name of models.
         """
         if len(self.models.keys()) == 0:
-            self.fit(X_train,X_test,y_train,y_test)
+            self.fit(X_train, X_test, y_train, y_test)
 
         return self.models
 
 
 def adjusted_rsquared(r2, n, p):
-    return 1 - (1-r2) * ((n-1) / (n-p-1))
+    return 1 - (1 - r2) * ((n - 1) / (n - p - 1))
 
 
 # Helper class for performing classification
@@ -873,7 +866,7 @@ class LazyRegressor:
             try:
                 temp_list = []
                 for regressor in self.regressors:
-                    full_name = (regressor.__class__.__name__, regressor)
+                    full_name = (regressor.__name__, regressor)
                     temp_list.append(full_name)
                 self.regressors = temp_list
             except Exception as exception:
@@ -899,7 +892,11 @@ class LazyRegressor:
                 self.models[name] = pipe
                 y_pred = pipe.predict(X_test)
 
-
+                r_squared = r2_score(y_test, y_pred)
+                adj_rsquared = adjusted_rsquared(
+                    r_squared, X_test.shape[0], X_test.shape[1]
+                )
+                rmse = np.sqrt(mean_squared_error(y_test, y_pred))
                 r_squared = round( r2_score(y_test, y_pred), 3)
                 mean_sq=round(mean_squared_error(y_test,y_pred) , 3)
                 adj_rsquared = adjusted_rsquared(r_squared, X_test.shape[0], X_test.shape[1])
@@ -1014,9 +1011,7 @@ class LazyRegressor:
             "Agreement Index": agree_index,
             "NashSutCliffe": nash_sutcliffe,
             "LogNashsutCliffe": log_nashsutcliffe,
-            
-
-          
+                      
             # "Bias":bias,
             "Time Taken": TIME
         }
@@ -1025,7 +1020,9 @@ class LazyRegressor:
             scores[self.custom_metric.__name__] = CUSTOM_METRIC
 
         scores = pd.DataFrame(scores)
-        scores = scores.sort_values(by="Adjusted R-Squared", ascending=False).set_index("Model")
+        scores = scores.sort_values(by="Adjusted R-Squared", ascending=False).set_index(
+            "Model"
+        )
 
         if self.predictions:
             predictions_df = pd.DataFrame.from_dict(predictions)
@@ -1056,7 +1053,7 @@ class LazyRegressor:
             with key as name of models.
         """
         if len(self.models.keys()) == 0:
-            self.fit(X_train,X_test,y_train,y_test)
+            self.fit(X_train, X_test, y_train, y_test)
 
         return self.models
 
