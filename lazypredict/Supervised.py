@@ -96,17 +96,13 @@ removed_regressors = [
     # ("_SigmoidCalibration", sklearn.calibration._SigmoidCalibration),
 ]
 
-CLASSIFIERS = [
-    est
-    for est in all_estimators()
-    if (issubclass(est[1], ClassifierMixin) and (est[0] not in removed_classifiers))
-]
 
-REGRESSORS = [
-    est
-    for est in all_estimators()
-    if (issubclass(est[1], RegressorMixin) and (est[0] not in removed_regressors))
-]
+CLASSIFIERS = [est for est in all_estimators() if
+               (issubclass(est[1], ClassifierMixin) and (est[0] not in removed_classifiers))]
+
+REGRESSORS = [est for est in all_estimators() if
+              (issubclass(est[1], RegressorMixin) and (est[0] not in removed_regressors))]
+
 
 REGRESSORS.append(("XGBRegressor", xgboost.XGBRegressor))
 REGRESSORS.append(("LGBMRegressor", lightgbm.LGBMRegressor))
@@ -1028,9 +1024,7 @@ class LazyRegressor:
             "Agreement Index": agree_index,
             "NashSutCliffe": nash_sutcliffe,
             "LogNashsutCliffe": log_nashsutcliffe,
-            
-
-          
+                      
             # "Bias":bias,
             "Time Taken": TIME
         }
