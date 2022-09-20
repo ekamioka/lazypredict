@@ -52,6 +52,7 @@ pd.set_option("display.precision", 2)
 pd.set_option("display.float_format", lambda x: "%.2f" % x)
 
 removed_classifiers = [
+<<<<<<< HEAD
     # ("CheckingClassifier", sklearn.utils._mocking.CheckingClassifier),
     ("ClassifierChain", ClassifierChain),
     ("ComplementNB", ComplementNB),
